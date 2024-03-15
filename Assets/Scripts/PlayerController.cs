@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI countText;
 
     public GameObject winTextObject;
+    public GameObject loseTextObject;
+    public GameObject restartButton;
+
+    public GameObject fundoTela;
+
+    public float jumpSpeed;
+    private float ySpeed;
 
     private int count;
 
@@ -26,7 +33,28 @@ public class PlayerController : MonoBehaviour
 
         SetCountText();
 
+        fundoTela.SetActive(false);
         winTextObject.SetActive(false);
+        loseTextObject.SetActive(false);
+        restartButton.SetActive(false);
+    }
+    
+
+    void Update()
+    {
+        if(rb.position[1] < 0)
+        {
+            restartButton.SetActive(true);
+            loseTextObject.SetActive(true);
+            fundoTela.SetActive(true);
+        }
+
+        
+        if (Input.GetKeyDown("space"))
+        {
+            Vector3 jump = new Vector3(0.0f, 200.0f, 0.0f);
+            rb.AddForce(jump);
+        }
     }
 
     void OnMove(InputValue movementValue)
@@ -44,7 +72,10 @@ public class PlayerController : MonoBehaviour
         if (count == 8)
         {
             winTextObject.SetActive(true);
+            restartButton.SetActive(true);
+            fundoTela.SetActive(true);
         }
+
     }
 
 
