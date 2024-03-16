@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         SetCountText();
 
         timeIsRunning = true;
-        timeRemaining = 30;
+        timeRemaining = 10;
 
         fundoTela.SetActive(false);
         winTextObject.SetActive(false);
@@ -58,17 +58,19 @@ public class PlayerController : MonoBehaviour
 
             timeRemaining -= Time.deltaTime;
             DisplayTime(timeRemaining);
-            //if (timeRemaining >= 0)
-            //{
-            //}
+            if (timeRemaining < 0)
+            {
+                LostScreen();
+            }
 
         }
 
-        if(rb.position[1] < 0)
+
+        print(rb.position);
+
+        if(rb.position[1] < 0 || rb.position[0] > 50 || rb.position[0] < -50 || rb.position[2] > 50 || rb.position[2] < -50)
         {
-            restartButton.SetActive(true);
-            loseTextObject.SetActive(true);
-            fundoTela.SetActive(true);
+            LostScreen();
         }
 
         
@@ -107,9 +109,8 @@ public class PlayerController : MonoBehaviour
 
         if (count == 8)
         {
-            winTextObject.SetActive(true);
-            restartButton.SetActive(true);
-            fundoTela.SetActive(true);
+            WinScreen();
+            
         }
 
     }
@@ -126,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PickUp"))
+        if (other.gameObject.CompareTag("PickUp") && timeIsRunning)
         {
             other.gameObject.SetActive(false);
             count++;
@@ -136,6 +137,36 @@ public class PlayerController : MonoBehaviour
             SetCountText();
 
         }
+
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            LostScreen();
+
+        }
+
+
+
+    }
+
+    private void WinScreen()
+    {
+        winTextObject.SetActive(true);
+        restartButton.SetActive(true);
+        fundoTela.SetActive(true);
+
+    }
+
+    private void LostScreen()
+    {
+        countText.text = "";
+        timeText.text = "";
+        timeIsRunning = false;
+
+
+        restartButton.SetActive(true);
+        loseTextObject.SetActive(true);
+
+        fundoTela.SetActive(true);
 
     }
 
