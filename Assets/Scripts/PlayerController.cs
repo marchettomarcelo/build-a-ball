@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
+//using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,6 +26,11 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
 
+
+    public float timeRemaining;
+    public bool timeIsRunning = true;
+    public TMP_Text timeText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +39,9 @@ public class PlayerController : MonoBehaviour
         count = 0;
 
         SetCountText();
+
+        timeIsRunning = true;
+        timeRemaining = 30;
 
         fundoTela.SetActive(false);
         winTextObject.SetActive(false);
@@ -42,6 +52,18 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+        if (timeIsRunning)
+        {
+
+            timeRemaining -= Time.deltaTime;
+            DisplayTime(timeRemaining);
+            //if (timeRemaining >= 0)
+            //{
+            //}
+
+        }
+
         if(rb.position[1] < 0)
         {
             restartButton.SetActive(true);
@@ -55,6 +77,20 @@ public class PlayerController : MonoBehaviour
             Vector3 jump = new Vector3(0.0f, 200.0f, 0.0f);
             rb.AddForce(jump);
         }
+    }
+
+    void DisplayTime(float timeToDisplay)
+    {
+
+        
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+
+        
+
+        timeText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
+
+
     }
 
     void OnMove(InputValue movementValue)
@@ -94,6 +130,8 @@ public class PlayerController : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             count++;
+
+            timeRemaining += 30;
 
             SetCountText();
 
