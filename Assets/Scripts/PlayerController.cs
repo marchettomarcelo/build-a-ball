@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 0;
-    public TextMeshProUGUI countText;
+    public TMP_Text countText;
 
     public GameObject winTextObject;
     public GameObject loseTextObject;
@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
     public float timeRemaining;
     public bool timeIsRunning = true;
     public TMP_Text timeText;
+
+
+    public AudioSource src;
+    public AudioClip src1, src2;
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +70,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        print(rb.position);
+        
 
         if(rb.position[1] < 0 || rb.position[0] > 50 || rb.position[0] < -50 || rb.position[2] > 50 || rb.position[2] < -50)
         {
@@ -129,6 +133,11 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PickUp") && timeIsRunning)
         {
+
+            src.clip = src1;
+            src.Play();
+
+
             other.gameObject.SetActive(false);
             count++;
 
@@ -140,6 +149,10 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("Enemy"))
         {
+
+            src.clip = src2;
+            src.Play();
+
             LostScreen();
 
         }
