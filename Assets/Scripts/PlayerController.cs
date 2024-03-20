@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     public GameObject loseTextObject;
     public GameObject restartButton;
 
+    private bool ganhouJogo;
+    private bool perdeuJogo;
+
     public GameObject fundoTela;
 
     public float jumpSpeed;
@@ -38,6 +41,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        perdeuJogo = false;
+        ganhouJogo = false;
+
         rb = GetComponent<Rigidbody>();
 
         count = 0;
@@ -45,7 +52,7 @@ public class PlayerController : MonoBehaviour
         SetCountText();
 
         timeIsRunning = true;
-        timeRemaining = 10;
+        timeRemaining = 11;
 
         fundoTela.SetActive(false);
         winTextObject.SetActive(false);
@@ -88,7 +95,10 @@ public class PlayerController : MonoBehaviour
     void DisplayTime(float timeToDisplay)
     {
 
-        
+        if (ganhouJogo == true) return;
+        if (perdeuJogo == true) return;
+
+
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
 
@@ -111,7 +121,7 @@ public class PlayerController : MonoBehaviour
     {
         countText.text = "Count: " + count.ToString();
 
-        if (count == 8)
+        if (count == 15)
         {
             WinScreen();
             
@@ -141,7 +151,7 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             count++;
 
-            timeRemaining += 30;
+            timeRemaining += 5;
 
             SetCountText();
 
@@ -163,6 +173,11 @@ public class PlayerController : MonoBehaviour
 
     private void WinScreen()
     {
+        ganhouJogo = true;
+        if (perdeuJogo == true) return;
+
+        countText.text = "";
+        timeText.text = "";
         winTextObject.SetActive(true);
         restartButton.SetActive(true);
         fundoTela.SetActive(true);
@@ -171,6 +186,8 @@ public class PlayerController : MonoBehaviour
 
     private void LostScreen()
     {
+        perdeuJogo = true;
+        if (ganhouJogo == true) return;
         countText.text = "";
         timeText.text = "";
         timeIsRunning = false;
